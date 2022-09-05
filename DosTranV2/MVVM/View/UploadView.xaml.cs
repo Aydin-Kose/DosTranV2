@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using DosTranV2.MVVM.ViewModel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,9 +20,11 @@ namespace DosTranV2.MVVM.View
     /// </summary>
     public partial class UploadView : UserControl
     {
+        UploadViewModel model;
         public UploadView()
         {
             InitializeComponent();
+            model = (UploadViewModel)this.DataContext;
         }
 
         private void File_Drop(object sender, DragEventArgs e)
@@ -35,7 +38,7 @@ namespace DosTranV2.MVVM.View
             bool? response = openFileDialog.ShowDialog();
             if (response == true)
             {
-                var a = openFileDialog.FileName;
+                model.FileLocation = openFileDialog.FileName;
             }
         }
     }
