@@ -50,13 +50,6 @@ namespace DosTranV2.MVVM.ViewModel
             set { _dataSet = value; }
         }
 
-
-
-
-
-
-
-
         public UploadViewModel()
         {
             LoadModel();
@@ -74,7 +67,8 @@ namespace DosTranV2.MVVM.ViewModel
 
         private void UploadAction(object parameter)
         {
-            Password = (parameter as PasswordBox).Password;
+            FTP ftp = new FTP(SelectedEnvironmentIP, OpID, (parameter as PasswordBox).Password);
+            ftp.Upload(DataSet, FileLocation);
         }
     }
 }
