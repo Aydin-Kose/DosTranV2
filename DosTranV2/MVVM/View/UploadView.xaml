@@ -40,7 +40,19 @@
                     <Button Grid.Row="2" Content="Dosya Seç" Width="80" Margin="10" Click="File_Click"/>
                 </StackPanel>
             </Grid>
-            <TextBox Grid.Row="2" Text="{Binding FileLocation, Mode=TwoWay}"></TextBox>
+            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0 0 25 0">
+                <Label Content="Ortam" Foreground="White"/>
+                <ComboBox ItemsSource="{Binding Path=EnvironmentList}" DisplayMemberPath="Name" SelectedValuePath="IP" SelectedValue="{Binding SelectedEnvironmentIP}"/>
+                <Label Content="Op ID" Foreground="White"/>
+                <TextBox Text="{Binding OpID}"/>
+                <Label Content="Şifre" Foreground="White"/>
+                <PasswordBox x:Name="passBox"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Margin="25 0 0 0">
+                <Label Content="Host Dosya İsmi" Foreground="White"/>
+                <TextBox Text="{Binding DataSet}"/>
+                <Button Content="Upload" HorizontalAlignment="Center" VerticalAlignment="Top" Command="{Binding Upload}" CommandParameter="{Binding ElementName=passBox}"/>
+            </StackPanel>
         </Grid>
     </StackPanel>
 </UserControl>

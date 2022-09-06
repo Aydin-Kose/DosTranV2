@@ -29,7 +29,7 @@ namespace DosTranV2.MVVM.View
 
         private void File_Drop(object sender, DragEventArgs e)
         {
-
+            
         }
 
         private void File_Click(object sender, RoutedEventArgs e)

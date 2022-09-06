@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DosTranV2.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DevIP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TestIP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ftp://10.4.141.100</Value>
+    </Setting>
+    <Setting Name="ProdIP" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ftp://10.4.100.11</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
