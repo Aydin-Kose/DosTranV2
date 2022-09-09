@@ -7,9 +7,9 @@
              xmlns:model="clr-namespace:DosTranV2.MVVM.Model"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <model:UserModel/>
-    </UserControl.DataContext>
+    </UserControl.DataContext>-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -24,7 +24,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Op ID  : " Foreground="White"/>
-                <TextBox Grid.Column="1" Text="{Binding UserModel.OpID}" VerticalAlignment="Center" />
+                <TextBox Grid.Column="1" Text="{Binding OpID}" VerticalAlignment="Center" />
                 <Label Grid.Column="2" Content="Şifre    : " Foreground="White"/>
                 <PasswordBox  Grid.Column="3" x:Name="passBox" VerticalAlignment="Center"/>
             </Grid>

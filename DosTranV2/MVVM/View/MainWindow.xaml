@@ -63,7 +63,7 @@
                 <RadioButton Content="Ayarlar" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding UploadViewCommand}" extensions:Extensions.Icon="&#9881;"/>
             </StackPanel>
         </Border>
-        <ContentPresenter Content="{Binding CurrentView}"/>
+        <ContentPresenter Content="{Binding CurrentView, Mode=TwoWay}"/>
     </DockPanel>
     <!--<Grid>
         <Grid.ColumnDefinitions>

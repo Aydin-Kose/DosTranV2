@@ -1,12 +1,13 @@
-﻿using DosTranV2.MVVM.Model;
-using System.Collections.Generic;
+﻿using DosTranV2.Core;
+using DosTranV2.MVVM.Model;
 
 namespace DosTranV2.MVVM.ViewModel
 {
-    internal class UploadViewModel
+    public class UploadViewModel : BaseViewModel
     {
         private string _opID;
         private string _fileName;
+        private string _dataSet;
 
         public string FileName
         {
@@ -14,6 +15,15 @@ namespace DosTranV2.MVVM.ViewModel
             set { _fileName = value; }
         }
         public UserModel UserModel { get; set; }
+        public string DataSet
+        {
+            get { return _dataSet; }
+            set 
+            { 
+                _dataSet = value;
+                OnPropertyChanged("DataSet");
+            }
+        }
 
         public UploadViewModel()
         {

@@ -1,12 +1,10 @@
-﻿using DosTranV2.MVVM.Model;
-using System;
+﻿using DosTranV2.Core;
+using DosTranV2.MVVM.Model;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace DosTranV2.MVVM.ViewModel
 {
-    internal class DownloadViewModel
+    public class DownloadViewModel :BaseViewModel
     {
         private List<EnvironmentModel> _environmentList;
         private string selectedEnvironmentIP;

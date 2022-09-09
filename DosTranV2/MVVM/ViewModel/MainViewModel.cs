@@ -1,9 +1,5 @@
 ﻿using DosTranV2.Core;
 using DosTranV2.MVVM.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace DosTranV2.MVVM.ViewModel
@@ -18,8 +14,8 @@ namespace DosTranV2.MVVM.ViewModel
         UploadViewModel UploadVM { get; set; }
         DownloadViewModel DownloadVM { get; set; }
         UserModel UserModel { get; set; }
-        private object _currentView;
-        public object CurrentView
+        private BaseViewModel _currentView;
+        public BaseViewModel CurrentView
         {
             get { return _currentView; }
             set
@@ -31,7 +27,7 @@ namespace DosTranV2.MVVM.ViewModel
         public MainViewModel()
         {
             UserModel = new UserModel();
-            UploadVM = new UploadViewModel() { UserModel= UserModel};
+            UploadVM = new UploadViewModel() { UserModel = UserModel, DataSet="aaaa" };
             DownloadVM = new DownloadViewModel() { UserModel = UserModel };
 
             CurrentView = DownloadVM;
@@ -44,8 +40,13 @@ namespace DosTranV2.MVVM.ViewModel
             MoveWindowCommand = new Command(o => { Application.Current.MainWindow.DragMove(); });
             ShutdownWindowCommand = new Command(o => { Application.Current.Shutdown(); });
             MinimizeWindowCommand = new Command(o => { Application.Current.MainWindow.WindowState = WindowState.Minimized; });
-            UploadViewCommand = new Command(o => { CurrentView = UploadVM; });
+            UploadViewCommand = new Command(Upload);
             DownloadViewCommand = new Command(o => { CurrentView = DownloadVM; });
+        }
+
+        public void Upload(object o)
+        {
+            CurrentView = UploadVM;
         }
     }
 }
