@@ -19,7 +19,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <view:UserView DataContext="{Binding UserModel}"/>
+        <view:UserView x:Name="User" DataContext="{Binding UserModel}"/>
         <!--<Border BorderThickness="1" BorderBrush="LightGray" Margin="10 10 10 -1" Padding="0 2 5 2">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -44,7 +44,7 @@
                 <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EnvironmentList}" DisplayMemberPath="Name" SelectedValuePath="IP" SelectedValue="{Binding SelectedEnvironmentIP}" VerticalAlignment="Center" Height="18" FontSize="10"/>
             </Grid>
         </Border>-->
-        <Grid Grid.Row="2" Drop="File_Drop">
+        <Grid Grid.Row="2" Drop="FileSelect_Drop">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="53*"/>
                 <ColumnDefinition Width="97*"/>
@@ -61,10 +61,10 @@
                     Height="150"
                     Margin="10 5 10 5"/>
             </StackPanel>
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left" Grid.ColumnSpan="2" Margin="90,0,0,0">
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Aktarılacak Dosyayı Sürükleyin" FontSize="14" Foreground="#444" Width="120"/>
-                <Button Width="70" Height="30" Content="Dosya Seç" Style="{StaticResource PrimaryButtonStyle}" Margin="0 10 0 0"/>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="{Binding FileName, Mode=TwoWay}" FontSize="14" Foreground="#444" Width="120"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="Aktarılacak Dosyayı Sürükleyin" FontSize="14" Foreground="#444" Width="100"/>
+                <Button Width="70" Height="30" Content="Dosya Seç" Style="{StaticResource PrimaryButtonStyle}" Margin="0 10 0 0" Click="FileSelect_Click"/>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap" Text="{Binding FileName, Mode=TwoWay}" FontSize="8" Foreground="#444" Width="120" Margin="0 5 0 0"/>
             </StackPanel>
         </Grid>
         <Border BorderThickness="1" BorderBrush="LightGray" Grid.Row="3" Margin="10 0 10 0" Padding="0 2 0 2">
@@ -81,7 +81,7 @@
             <!--</Grid>-->
         </Border>
         <DockPanel Grid.Row="4">
-            <Button Width="120" Height="30" Content="Aktar" Style="{StaticResource PrimaryButtonStyle}" Margin="10 10 0 10" Click="Button_Click"/>
+            <Button Width="120" Height="30" Content="Aktar" Style="{StaticResource PrimaryButtonStyle}" Margin="10 10 0 10" Command="{Binding FTPUpload}" CommandParameter="{Binding ElementName="User"}"/>
             <!--<Button Width="70" Height="30" Content="Çıkış" Style="{StaticResource PrimaryButtonStyle}" Margin="0 0 10 10" HorizontalAlignment="Right"/>-->
         </DockPanel>
     </Grid>

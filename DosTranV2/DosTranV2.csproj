@@ -133,6 +133,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icons\download.png" />
+    <Resource Include="Icons\upload.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\settings.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

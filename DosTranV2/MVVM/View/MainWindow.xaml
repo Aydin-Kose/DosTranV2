@@ -7,7 +7,7 @@
         xmlns:extensions="clr-namespace:DosTranV2.Core"
         xmlns:viewModel="clr-namespace:DosTranV2.MVVM.ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="350"
+        Title="MainWindow" Height="400" Width="400"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True"
@@ -32,7 +32,7 @@
                 </StackPanel>
             </Grid>
         </Border>
-        <Border Width="40" HorizontalAlignment="Left" Background="#252525">
+        <Border Width="43" HorizontalAlignment="Left" Background="#252525">
             <Border.Style>
                 <Style>
                     <Style.Triggers>
@@ -49,7 +49,7 @@
                             <EventTrigger.Actions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="(Border.Width)"  To="40" Duration="0:0:.1"/>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Border.Width)"  To="43" Duration="0:0:.1"/>
                                     </Storyboard>
                                 </BeginStoryboard>
                             </EventTrigger.Actions>
@@ -58,9 +58,9 @@
                 </Style>
             </Border.Style>
             <StackPanel>
-                <RadioButton Content="Hosttan Al" FontSize="18" FontWeight="Normal" Foreground="LightGray" Command="{Binding DownloadViewCommand}"/>
-                <RadioButton Content="Hosta Aktar" FontSize="18" FontWeight="Normal" Foreground="LightGray" Command="{Binding UploadViewCommand}"/>
-                <RadioButton Content="Ayarlar" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding UploadViewCommand}" extensions:Extensions.Icon="&#9881;"/>
+                <RadioButton Content=" Hosttan Al" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding DownloadViewCommand}" IsChecked="True" extensions:Extensions.Icon="/Icons/upload.png"/>
+                <RadioButton Content=" Hosta Aktar" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding UploadViewCommand}" extensions:Extensions.Icon="/Icons/download.png"/>
+                <RadioButton Content=" Ayarlar" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding UploadViewCommand}" extensions:Extensions.Icon="/Icons/settings.png"/>
             </StackPanel>
         </Border>
         <ContentPresenter Content="{Binding CurrentView, Mode=TwoWay}"/>

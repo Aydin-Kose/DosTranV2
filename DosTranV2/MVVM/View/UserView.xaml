@@ -26,7 +26,7 @@
                 <Label Content="Op ID  : " Foreground="White"/>
                 <TextBox Grid.Column="1" Text="{Binding OpID}" VerticalAlignment="Center" />
                 <Label Grid.Column="2" Content="Şifre    : " Foreground="White"/>
-                <PasswordBox  Grid.Column="3" x:Name="passBox" VerticalAlignment="Center"/>
+                <PasswordBox x:Name="pwBox"  Grid.Column="3" VerticalAlignment="Center" />
             </Grid>
         </Border>
         <Border BorderThickness="1" BorderBrush="LightGray" Grid.Row="1" Margin="10 0 10 0" Padding="0 2 5 2">
@@ -36,7 +36,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Ortam : " HorizontalAlignment="Left" Foreground="White"/>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EnvironmentList}" DisplayMemberPath="Name" SelectedValuePath="IP" SelectedValue="{Binding SelectedEnvironmentIP}" VerticalAlignment="Center" Height="18" FontSize="10"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EnvironmentList}" DisplayMemberPath="Name" SelectedValue="{Binding SelectedEnvironmentIP}" VerticalAlignment="Center" Height="18" FontSize="10"/>
             </Grid>
         </Border>
     </Grid>

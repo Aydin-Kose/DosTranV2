@@ -13,7 +13,7 @@
                 <ControlTemplate TargetType="{x:Type RadioButton}">
                     <Border Background="{TemplateBinding Background}" CornerRadius="4" Margin="4">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="{TemplateBinding Margin}" Text="{Binding Path=(extensions:Extensions.Icon), RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+                            <Image Margin="{TemplateBinding Margin}"  Source="{Binding Path=(extensions:Extensions.Icon), RelativeSource={RelativeSource Mode=TemplatedParent}}" Height="20" Width="20"/>
                             <ContentPresenter VerticalAlignment="Center" Margin="0 0 0 2"/>
                         </StackPanel>
                     </Border>

@@ -27,7 +27,7 @@ namespace DosTranV2.MVVM.ViewModel
         public MainViewModel()
         {
             UserModel = new UserModel();
-            UploadVM = new UploadViewModel() { UserModel = UserModel, DataSet="aaaa" };
+            UploadVM = new UploadViewModel() { UserModel = UserModel };
             DownloadVM = new DownloadViewModel() { UserModel = UserModel };
 
             CurrentView = DownloadVM;
@@ -40,13 +40,8 @@ namespace DosTranV2.MVVM.ViewModel
             MoveWindowCommand = new Command(o => { Application.Current.MainWindow.DragMove(); });
             ShutdownWindowCommand = new Command(o => { Application.Current.Shutdown(); });
             MinimizeWindowCommand = new Command(o => { Application.Current.MainWindow.WindowState = WindowState.Minimized; });
-            UploadViewCommand = new Command(Upload);
+            UploadViewCommand = new Command(o => { CurrentView = UploadVM; });
             DownloadViewCommand = new Command(o => { CurrentView = DownloadVM; });
-        }
-
-        public void Upload(object o)
-        {
-            CurrentView = UploadVM;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DosTranV2.MVVM.ViewModel;
+using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -9,26 +10,32 @@ namespace DosTranV2.MVVM.View
     /// </summary>
     public partial class UploadView : UserControl
     {
-        UploadViewModel model;
+        private UploadViewModel model
+        {
+            get { return (UploadViewModel)DataContext; }
+        }
+
+
         public UploadView()
         {
             InitializeComponent();
-            model = (UploadViewModel)DataContext;
         }
 
-        private void File_Drop(object sender, DragEventArgs e)
+        private void FileSelect_Drop(object sender, DragEventArgs e)
         {
 
         }
 
-        private void File_Click(object sender, RoutedEventArgs e)
+        private void FileSelect_Click(object sender, RoutedEventArgs e)
         {
-
+            OpenFileDialog openFileDialog = new OpenFileDialog() { Multiselect = false, Filter = "Text|*.txt" };
+            bool? response = openFileDialog.ShowDialog();
+            if (response == true)
+            {
+                model.FileLocation = openFileDialog.FileName;
+                model.FileName = openFileDialog.SafeFileName;
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            model.DataSet = "a";
-        }
     }
 }

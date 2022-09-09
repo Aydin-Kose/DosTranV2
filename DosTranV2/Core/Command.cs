@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace DosTranV2.Core
 {
-    internal class Command : ICommand
+    public class Command : ICommand
     {
         private Action<object> _execute;
         private Func<object, bool> _canExecute;
