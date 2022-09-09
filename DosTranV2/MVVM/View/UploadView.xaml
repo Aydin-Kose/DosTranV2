@@ -81,7 +81,7 @@
             <!--</Grid>-->
         </Border>
         <DockPanel Grid.Row="4">
-            <Button Width="120" Height="30" Content="Aktar" Style="{StaticResource PrimaryButtonStyle}" Margin="10 10 0 10" Command="{Binding FTPUpload}" CommandParameter="{Binding ElementName="User"}"/>
+            <Button Width="120" Height="30" Content="Aktar" Style="{StaticResource PrimaryButtonStyle}" Margin="10 10 0 10" Command="{Binding FTPUpload}" CommandParameter="{Binding ElementName=UserView.pw}"/>
             <!--<Button Width="70" Height="30" Content="Çıkış" Style="{StaticResource PrimaryButtonStyle}" Margin="0 0 10 10" HorizontalAlignment="Right"/>-->
         </DockPanel>
     </Grid>
