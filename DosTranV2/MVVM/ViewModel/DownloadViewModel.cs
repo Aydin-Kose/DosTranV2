@@ -1,38 +1,61 @@
 ﻿using DosTranV2.Core;
 using DosTranV2.MVVM.Model;
+using DosTranV2.MVVM.View;
 using System.Collections.Generic;
+using System.Data;
 
 namespace DosTranV2.MVVM.ViewModel
 {
-    public class DownloadViewModel :BaseViewModel
+    public class DownloadViewModel : BaseViewModel
     {
-        private List<EnvironmentModel> _environmentList;
-        private string selectedEnvironmentIP;
-
-        public List<EnvironmentModel> EnvironmentList
+        private string _fileLocation;
+        private string _dataSet;
+        private string _seperator;
+        public string FileLocation
         {
-            get { return _environmentList; }
-            set { _environmentList = value; }
+            get
+            {
+                return _fileLocation;
+            }
+            set
+            {
+                _fileLocation = value;
+                OnPropertyChanged("FileLocation");
+            }
         }
-        public string SelectedEnvironmentIP
+        public string FileType { get; set; }
+        public string DataSet
         {
-            get { return selectedEnvironmentIP; }
-            set { selectedEnvironmentIP = value; }
+            get { return _dataSet; }
+            set
+            {
+                _dataSet = value;
+                OnPropertyChanged("DataSet");
+            }
+        }
+        public string Seperator
+        {
+            get { return _seperator; }
+            set
+            {
+                _seperator = value;
+                OnPropertyChanged("Seperator");
+            }
         }
         public UserModel UserModel { get; set; }
+        public Command FTPDownload { get; set; }
 
         public DownloadViewModel()
         {
-            LoadModel();
+            FileType = "Text";
+            Seperator = ";";
+            FTPDownload = new Command(DownloadAction);
         }
 
-        private void LoadModel()
+        private void DownloadAction(object parameter)
         {
-            EnvironmentList = new List<EnvironmentModel> {
-                new EnvironmentModel { Name="Dev", IP= Properties.Settings.Default.DevIP},
-                new EnvironmentModel { Name="Test", IP= Properties.Settings.Default.TestIP},
-                new EnvironmentModel { Name="Prod", IP= Properties.Settings.Default.ProdIP}
-            };
+            var FTPClient = new FTPClient(UserModel.SelectedEnvironment.IP, UserModel.OpID, ((UserView)parameter).pwBox.Password);
+            FTPClient.Download(DataSet, $"{FileLocation}\\{DataSet}.{(FileType == "Text" ? "txt" : "csv")}");
         }
     }
 }

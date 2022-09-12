@@ -7,14 +7,13 @@ namespace DosTranV2.MVVM.Model
     {
         private string _opID;
         private List<EnvironmentModel> _environmentList;
-        private EnvironmentModel selectedEnvironmentIP;
+        private EnvironmentModel _selectedEnvironment;
 
         public string OpID
         {
             get { return _opID; }
             set { _opID = value; }
         }
-        public string Password { get; set; }
         public List<EnvironmentModel> EnvironmentList
         {
             get { return _environmentList; }
@@ -24,10 +23,10 @@ namespace DosTranV2.MVVM.Model
                 OnPropertyChanged("EnvironmentList");
             }
         }
-        public EnvironmentModel SelectedEnvironmentIP
+        public EnvironmentModel SelectedEnvironment
         {
-            get { return selectedEnvironmentIP; }
-            set { selectedEnvironmentIP = value; }
+            get { return _selectedEnvironment; }
+            set { _selectedEnvironment = value; }
         }
 
         public UserModel()

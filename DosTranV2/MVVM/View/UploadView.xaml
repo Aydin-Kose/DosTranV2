@@ -8,9 +8,6 @@
              xmlns:viewModel="clr-namespace:DosTranV2.MVVM.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="350" d:DesignWidth="300" Background="#1E1E1E">
-    <!--<UserControl.DataContext>
-        <viewModel:UploadViewModel/>
-    </UserControl.DataContext>-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -19,7 +16,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <view:UserView x:Name="User" DataContext="{Binding UserModel}"/>
+        <view:UserView x:Name="UserComponent" DataContext="{Binding UserModel}"/>
         <!--<Border BorderThickness="1" BorderBrush="LightGray" Margin="10 10 10 -1" Padding="0 2 5 2">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -81,7 +78,7 @@
             <!--</Grid>-->
         </Border>
         <DockPanel Grid.Row="4">
-            <Button Width="120" Height="30" Content="Aktar" Style="{StaticResource PrimaryButtonStyle}" Margin="10 10 0 10" Command="{Binding FTPUpload}" CommandParameter="{Binding ElementName=UserView.pw}"/>
+            <Button Width="120" Height="30" Content="Aktar" Style="{StaticResource PrimaryButtonStyle}" Margin="10 10 0 10" Command="{Binding FTPUpload}" CommandParameter="{Binding ElementName=UserComponent}"/>
             <!--<Button Width="70" Height="30" Content="Çıkış" Style="{StaticResource PrimaryButtonStyle}" Margin="0 0 10 10" HorizontalAlignment="Right"/>-->
         </DockPanel>
     </Grid>

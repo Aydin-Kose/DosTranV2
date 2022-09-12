@@ -66,6 +66,7 @@
     <Compile Include="Core\BaseViewModel.cs" />
     <Compile Include="Core\Command.cs" />
     <Compile Include="Core\Extensions.cs" />
+    <Compile Include="Core\FTPClient.cs" />
     <Compile Include="MVVM\Model\EnvironmentModel.cs" />
     <Compile Include="MVVM\Model\UserModel.cs" />
     <Compile Include="MVVM\View\MainWindow.xaml.cs">

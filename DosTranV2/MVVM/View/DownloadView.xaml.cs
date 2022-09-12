@@ -1,6 +1,8 @@
 ﻿using DosTranV2.MVVM.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
+using UserControl = System.Windows.Controls.UserControl;
 
 namespace DosTranV2.MVVM.View
 {
@@ -9,16 +11,28 @@ namespace DosTranV2.MVVM.View
     /// </summary>
     public partial class DownloadView : UserControl
     {
-        public DownloadViewModel model;
+        private DownloadViewModel model
+        {
+            get { return (DownloadViewModel)DataContext; }
+        }
         public DownloadView()
         {
-            model = (DownloadViewModel)DataContext;
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void FileLocationButton_Click(object sender, RoutedEventArgs e)
+        {
+            var folderBrowserDialog = new FolderBrowserDialog();
+            DialogResult result = folderBrowserDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                model.FileLocation = folderBrowserDialog.SelectedPath;
+            }
         }
     }
 }

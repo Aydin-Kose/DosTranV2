@@ -23,9 +23,9 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Label Content="Op ID  : " Foreground="White"/>
+                <Label Content="Op ID   : " Foreground="White"/>
                 <TextBox Grid.Column="1" Text="{Binding OpID}" VerticalAlignment="Center" />
-                <Label Grid.Column="2" Content="Şifre    : " Foreground="White"/>
+                <Label Grid.Column="2" Content="Şifre     : " Foreground="White"/>
                 <PasswordBox x:Name="pwBox"  Grid.Column="3" VerticalAlignment="Center" />
             </Grid>
         </Border>
@@ -35,8 +35,8 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Label Content="Ortam : " HorizontalAlignment="Left" Foreground="White"/>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EnvironmentList}" DisplayMemberPath="Name" SelectedValue="{Binding SelectedEnvironmentIP}" VerticalAlignment="Center" Height="18" FontSize="10"/>
+                <Label Content="Ortam  : " HorizontalAlignment="Left" Foreground="White"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EnvironmentList}" DisplayMemberPath="Name" SelectedValue="{Binding SelectedEnvironment}" VerticalAlignment="Center" Height="18" FontSize="10"/>
             </Grid>
         </Border>
     </Grid>
