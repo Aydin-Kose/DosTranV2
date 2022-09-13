@@ -3,6 +3,7 @@ using DosTranV2.MVVM.Model;
 using DosTranV2.MVVM.View;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 
 namespace DosTranV2.MVVM.ViewModel
 {
@@ -49,6 +50,7 @@ namespace DosTranV2.MVVM.ViewModel
         {
             FileType = "Text";
             Seperator = ";";
+            FileLocation = Path.GetTempPath();
             FTPDownload = new Command(DownloadAction);
         }
 

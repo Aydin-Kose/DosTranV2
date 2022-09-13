@@ -42,6 +42,7 @@ namespace DosTranV2.MVVM.Model
                 new EnvironmentModel { Name="Test", IP= Properties.Settings.Default.TestIP},
                 new EnvironmentModel { Name="Prod", IP= Properties.Settings.Default.ProdIP}
             };
+            SelectedEnvironment = EnvironmentList[1];
         }
     }
 }

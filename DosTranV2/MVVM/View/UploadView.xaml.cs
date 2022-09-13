@@ -1,5 +1,6 @@
 ﻿using DosTranV2.MVVM.ViewModel;
 using Microsoft.Win32;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,10 +22,6 @@ namespace DosTranV2.MVVM.View
             InitializeComponent();
         }
 
-        private void FileSelect_Drop(object sender, DragEventArgs e)
-        {
-
-        }
 
         private void FileSelect_Click(object sender, RoutedEventArgs e)
         {
@@ -37,5 +34,35 @@ namespace DosTranV2.MVVM.View
             }
         }
 
+        private void FileSelect_DragOver(object sender, DragEventArgs e)
+        {
+            bool dropEnabled = true;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop, true))
+            {
+                string[] filenames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                if (filenames.Length != 1 || Path.GetExtension(filenames[0]).ToUpperInvariant() != ".TXT")
+                {
+                    dropEnabled = false;
+                }
+            }
+            else
+            {
+                dropEnabled = false;
+            }
+
+            if (!dropEnabled)
+            {
+                e.Effects = DragDropEffects.None;
+                e.Handled = true;
+            }
+        }
+
+        private void FileSelect_Drop(object sender, DragEventArgs e)
+        {
+            string[] filenames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+            string fileLocation = filenames[0];
+            model.FileName = Path.GetFileName(fileLocation);
+            model.FileLocation = fileLocation;
+        }
     }
 }
