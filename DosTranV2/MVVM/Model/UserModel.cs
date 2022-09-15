@@ -1,4 +1,5 @@
 ﻿using DosTranV2.Core;
+using System;
 using System.Collections.Generic;
 
 namespace DosTranV2.MVVM.Model
@@ -36,7 +37,7 @@ namespace DosTranV2.MVVM.Model
 
         private void LoadModel()
         {
-            _opID = System.Environment.MachineName;
+            _opID = Environment.UserName;
             EnvironmentList = new List<EnvironmentModel> {
                 new EnvironmentModel { Name="Dev", IP= Properties.Settings.Default.DevIP},
                 new EnvironmentModel { Name="Test", IP= Properties.Settings.Default.TestIP},
