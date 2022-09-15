@@ -7,6 +7,7 @@
              xmlns:view="clr-namespace:DosTranV2.MVVM.View"
              xmlns:viewModel="clr-namespace:DosTranV2.MVVM.ViewModel"
              mc:Ignorable="d" 
+             x:Name="DownloadControl"
              d:DesignHeight="350" d:DesignWidth="300" Background="#1E1E1E">
     <Grid>
         <Grid.RowDefinitions>
@@ -25,7 +26,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <Label Content="Dataset: " HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
-                <TextBox Text="{Binding DataSet}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0 0 5 0"/>
+                <TextBox x:Name="datasetBox" Text="{Binding DataSet}" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="0 0 5 0"/>
             </Grid>
         </Border>
         <Grid Grid.Row="3">
@@ -41,7 +42,7 @@
                         <ComboBoxItem Content="Excel"/>
                     </ComboBox>
                     <Label Content="Seperatör : " HorizontalAlignment="Left" Foreground="White"/>
-                    <TextBox VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5 0 5 0" Text="{Binding Seperator}" TextAlignment="Center" FontWeight="Bold"/>
+                    <TextBox x:Name="seperatorBox" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5 0 5 0" Text="{Binding Seperator}" TextAlignment="Center" FontWeight="Bold"/>
                 </StackPanel>
             </Border>
             <!--<StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -78,8 +79,10 @@
             <!--</Grid>-->
         </Border>
         <DockPanel Grid.Row="5">
-            <Button Width="120" Height="30" Content="İndir" Style="{StaticResource PrimaryButtonStyle}" Margin="10 10 0 10" Command="{Binding FTPDownload}" CommandParameter="{Binding ElementName=UserComponent}"/>
-            <!--<Button Width="70" Height="30" Content="Çıkış" Style="{StaticResource PrimaryButtonStyle}" Margin="0 0 10 10" HorizontalAlignment="Right"/>-->
+            <Button DockPanel.Dock="Top" Width="120" Height="30" Content="İndir" Style="{StaticResource PrimaryButtonStyle}" Margin="10 10 0 10" Command="{Binding FTPDownload}" CommandParameter="{Binding ElementName=DownloadControl}"/>
+            <Border x:Name="messageBorder" DockPanel.Dock="Bottom" BorderThickness="2" >
+                <TextBlock x:Name="messageBox" Background="Silver" Text="{Binding UIMessage, FallbackValue=AlanlarıDoldur}" FontSize="10" Foreground="#FF3F3F3F" TextAlignment="Center" Padding="0 2 0 2"/>
+            </Border>
         </DockPanel>
     </Grid>
 </UserControl>
