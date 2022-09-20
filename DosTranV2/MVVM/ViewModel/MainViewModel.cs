@@ -41,7 +41,7 @@ namespace DosTranV2.MVVM.ViewModel
         }
         public MainViewModel()
         {
-            LoadModel();
+            Title = "DosTran Ver." + Properties.Settings.Default.Version;
             UserModel = new UserModel();
             UploadVM = new UploadViewModel(dbContext) { UserModel = UserModel };
             DownloadVM = new DownloadViewModel(dbContext) { UserModel = UserModel };
@@ -49,6 +49,8 @@ namespace DosTranV2.MVVM.ViewModel
             CurrentView = DownloadVM;
 
             SetCommands();
+            //LoadModel();
+
         }
 
         private void LoadModel()
@@ -59,7 +61,7 @@ namespace DosTranV2.MVVM.ViewModel
                 var result = MessageBox.Show("Database bağlantısı kurulamadı uygulama kapatılacak.");
                 if (result == MessageBoxResult.OK)
                 {
-                    Application.Current.Shutdown();
+                    Environment.Exit(0);
                 }
             }
             var latestVersion = dbContext.DOSTRAN_VERSION.OrderByDescending(x => x.Id).FirstOrDefault();
