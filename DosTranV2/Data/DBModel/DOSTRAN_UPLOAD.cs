@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
-namespace DosTranV2.Data.Model
+namespace DosTranV2.DBModel.Model
 {
     public class DOSTRAN_UPLOAD
     {

@@ -1,121 +1,154 @@
 ﻿using DosTranV2.Core;
 using DosTranV2.Data;
-using DosTranV2.Data.Model;
-using DosTranV2.MVVM.Model;
+using DosTranV2.DBModel.Model;
 using DosTranV2.MVVM.View;
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
+using System.Linq;
+using System.Net;
+using System.Text;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Media;
 
 namespace DosTranV2.MVVM.ViewModel
 {
-    public class UploadViewModel : BaseViewModel
+    internal class UploadViewModel : BaseViewModel
     {
-        private string _fileName;
+        private ApplicationDbContext dbContext;
+        private List<string> _dataSetList;
         private string _dataSet;
-        private string _uiMessage;
-        private ApplicationDbContext db;
-        
+        private MainViewModel mainViewModel;
+        private string _fileName;
+
+        public string DataSet
+        {
+            get { return _dataSet; }
+            set
+            {
+                _dataSet = value;
+                OnPropertyChanged(nameof(DataSet));
+            }
+        }
+
         public string FileLocation { get; set; }
         public string FileName
         {
             get { return _fileName; }
-            set { 
+            set
+            {
                 _fileName = value;
                 OnPropertyChanged("FileName");
             }
         }
-        public UserModel UserModel { get; set; }
-        public string DataSet
-        {
-            get { return _dataSet; }
-            set 
-            { 
-                _dataSet = value;
-                OnPropertyChanged("DataSet");
-            }
-        }
-        public string UIMessage
-        {
-            get { return _uiMessage; }
-            set 
-            {
-                _uiMessage = value;
-                OnPropertyChanged("UIMessage");
-            }
-        }
         public Command FTPUpload { get; set; }
 
-        public UploadViewModel(ApplicationDbContext dbContext)
+        public UploadViewModel(MainViewModel mainViewModel)
         {
-            db = dbContext;
+            this.mainViewModel = mainViewModel;
+            dbContext = new ApplicationDbContext(ApplicationConstant.CONN_STRING);
             FTPUpload = new Command(UploadAction);
         }
 
         private void UploadAction(object parameter)
         {
-            if (Validate(((UploadView)parameter)))
+            var mainWindow = (MainWindow)parameter;
+
+            if (Validate(mainWindow))
             {
-                var FTPClient = new FTPClient(UserModel.SelectedEnvironment.IP, UserModel.OpID, ((UploadView)parameter).UserComponent.passwordBox.Password);
+                mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("NormalBorderBrush");
+                mainViewModel.UIMessage = "İşlem başladı.";
+                var FTPClient = new FTPClient(mainViewModel.UserVM.SelectedEnvironment.IP, mainViewModel.UserVM.OpID, mainWindow.UserComponent.passwordBox.Password);
                 var result = FTPClient.Upload(DataSet, FileLocation);
-                UIMessage = result;
+                mainViewModel.UIMessage = result;
                 if (result == "İşlem Başarılı")
                 {
-                    db.DOSTRAN_LOG.Add(new DOSTRAN_LOG
-                    {
-                        DataSet = DataSet,
-                        OpID = UserModel.OpID,
-                        IslemTipi = "Upload",
-                        TarihSaat = DateTime.Now
-                    });
-                    try
-                    {
-                        db.SaveChanges();
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Windows.MessageBox.Show("Database Hata: \n" + ex.Message);
-                    }
-                    ((UploadView)parameter).messageBorder.BorderBrush = Brushes.DarkGreen;
+                    mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("SuccessBorderBrush");
+                    LogUpload();
                 }
                 else
                 {
-                    ((UploadView)parameter).messageBorder.BorderBrush = Brushes.DarkRed;
+                    mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("AlertBorderBrush");
                 }
             }
             else
             {
-                ((UploadView)parameter).messageBorder.BorderBrush = Brushes.DarkRed;
+                mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("AlertBorderBrush");
             }
         }
 
-        private bool Validate(UploadView view)
+        private bool Validate(MainWindow view)
         {
-            if (string.IsNullOrWhiteSpace(UserModel.OpID))
+            var uploadView = (UploadView)VisualTreeHelper.GetChild(view.content, 0);
+            if (string.IsNullOrWhiteSpace(mainViewModel.UserVM.OpID))
             {
-                UIMessage = "Op ID alanı boş olamaz";
+                mainViewModel.UIMessage = "Op ID alanı boş olamaz";
                 view.UserComponent.opIdBox.Focus();
                 return false;
             }
             else if (string.IsNullOrWhiteSpace(view.UserComponent.passwordBox.Password))
             {
-                UIMessage = "Şifre alanı boş olamaz";
+                mainViewModel.UIMessage = "Şifre alanı boş olamaz";
                 view.UserComponent.passwordBox.Focus();
                 return false;
             }
             else if (string.IsNullOrWhiteSpace(FileName))
             {
-                view.fileSelectButton.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));
+                uploadView.fileSelectButton.RaiseEvent(new RoutedEventArgs(System.Windows.Controls.Button.ClickEvent));
                 return false;
             }
             else if (string.IsNullOrWhiteSpace(DataSet))
             {
-                UIMessage = "DataSet alanı boş olamaz";
-                view.datasetBox.Focus();
+                mainViewModel.UIMessage = "DataSet alanı boş olamaz";
+                uploadView.datasetBox.Focus();
                 return false;
             }
             return true;
+        }
+
+        private void LogUpload()
+        {
+            dbContext.DOSTRAN_LOG.Add(new DOSTRAN_LOG
+            {
+                DataSet = DataSet,
+                OpID = mainViewModel.UserVM.OpID,
+                UserName = Environment.UserName,
+                IP = Dns.GetHostAddresses(Dns.GetHostName()).FirstOrDefault(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)?.ToString(),
+                IslemTipi = "Upload",
+                TarihSaat = DateTime.Now
+            });
+            if (!FillDataset().Any(x => x == DataSet))
+            {
+                dbContext.DOSTRAN_UPLOAD.Add(new DOSTRAN_UPLOAD
+                {
+                    DataSet = DataSet,
+                    OpID = mainViewModel.UserVM.OpID
+                });
+            }
+            try
+            {
+                dbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                mainViewModel.UIMessage = "Database Hata: \n" + ex.Message;
+                mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("AlertBorderBrush");
+            }
+        }
+
+        internal List<string> FillDataset()
+        {
+            try
+            {
+                return dbContext.DOSTRAN_UPLOAD.Where(x => x.OpID == mainViewModel.UserVM.OpID).Select(x => x.DataSet).ToList();
+            }
+            catch (Exception ex)
+            {
+                mainViewModel.UIMessage = "Dataset bilgisi alınamadı: " + ex.Message;
+                mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("AlertBorderBrush");
+                return new List<string>();
+            }
         }
     }
 }

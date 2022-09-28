@@ -1,10 +1,12 @@
 ﻿using DosTranV2.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
-namespace DosTranV2.MVVM.Model
+namespace DosTranV2.MVVM.ViewModel
 {
-    public class UserModel : BaseViewModel
+    internal class UserViewModel : BaseViewModel
     {
         private string _opID;
         private List<EnvironmentModel> _environmentList;
@@ -21,7 +23,7 @@ namespace DosTranV2.MVVM.Model
             set
             {
                 _environmentList = value;
-                OnPropertyChanged("EnvironmentList");
+                OnPropertyChanged(nameof(EnvironmentList));
             }
         }
         public EnvironmentModel SelectedEnvironment
@@ -30,7 +32,7 @@ namespace DosTranV2.MVVM.Model
             set { _selectedEnvironment = value; }
         }
 
-        public UserModel()
+        public UserViewModel()
         {
             LoadModel();
         }
@@ -38,12 +40,10 @@ namespace DosTranV2.MVVM.Model
         private void LoadModel()
         {
             _opID = Environment.UserName;
-            EnvironmentList = new List<EnvironmentModel> {
-                new EnvironmentModel { Name="Dev", IP= Properties.Settings.Default.DevIP},
-                new EnvironmentModel { Name="Test", IP= Properties.Settings.Default.TestIP},
-                new EnvironmentModel { Name="Prod", IP= Properties.Settings.Default.ProdIP}
-            };
+            EnvironmentList = ApplicationConstant.EnvironmentList;
             SelectedEnvironment = EnvironmentList[1];
         }
     }
+
+    
 }

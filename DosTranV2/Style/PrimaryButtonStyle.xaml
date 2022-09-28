@@ -2,9 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style TargetType="{x:Type Button}" x:Key="PrimaryButtonStyle">
         <Setter Property="Background" Value="{StaticResource PrimaryLightBrush}"/>
-        <Setter Property="Foreground" Value="LightGray"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontSize" Value="12"/>
 
         <Setter Property="Template">
             <Setter.Value>

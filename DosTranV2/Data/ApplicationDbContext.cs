@@ -1,15 +1,11 @@
-﻿using DosTranV2.Data.Model;
-using System;
-using System.Collections.Generic;
+﻿using DosTranV2.DBModel.Model;
 using System.Data.Entity;
-using System.Linq;
-using System.Text;
 
 namespace DosTranV2.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext()
+        public ApplicationDbContext(string connString): base(connString)
         {
 
         }
