@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="DosTranV2.MVVM.View.UserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DosTranV2.MVVM.View"
+             xmlns:model="clr-namespace:DosTranV2.MVVM.Model"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <!--<UserControl.DataContext>
+        <model:UserModel/>
+    </UserControl.DataContext>-->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border BorderThickness="1" BorderBrush="LightGray" Margin="10 10 10 -1" Padding="0 2 5 2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Op ID   : " Foreground="White"/>
+                <TextBox x:Name="opIdBox" Grid.Column="1" Text="{Binding OpID}" VerticalAlignment="Center" />
+                <Label Grid.Column="2" Content="Şifre     : " Foreground="White"/>
+                <PasswordBox x:Name="passwordBox"  Grid.Column="3" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+        <Border BorderThickness="1" BorderBrush="LightGray" Grid.Row="1" Margin="10 0 10 0" Padding="0 2 5 2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Content="Ortam  : " HorizontalAlignment="Left" Foreground="White"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EnvironmentList}" DisplayMemberPath="Name" SelectedValue="{Binding SelectedEnvironment}" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
