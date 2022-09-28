@@ -1,0 +1,79 @@
+﻿<Window x:Class="DosTranV2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DosTranV2"
+        xmlns:extensions="clr-namespace:DosTranV2.Core"
+        xmlns:viewModel="clr-namespace:DosTranV2.MVVM.ViewModel"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="400" Width="400"
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"
+        ResizeMode="NoResize">
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+    <DockPanel Background="#1E1E1E" Margin="7">
+        <Border Height="28" Background="#252525" DockPanel.Dock="Top">
+            <Border.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding MoveWindowCommand}"/>
+            </Border.InputBindings>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="DosTran Ver.2.0.0" Foreground="LightGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="100 0 0 0"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 4 0">
+                    <Button Content="−" Command="{Binding MinimizeWindowCommand}"/>
+                    <Button Content="🗙" Command="{Binding ShutdownWindowCommand}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+        <Border Width="43" HorizontalAlignment="Left" Background="#252525">
+            <Border.Style>
+                <Style>
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="Border.MouseEnter">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Border.Width)"  To="140" Duration="0:0:.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="Border.MouseLeave">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Border.Width)"  To="43" Duration="0:0:.1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel>
+                <RadioButton Content=" Hosttan Al" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding DownloadViewCommand}" IsChecked="True" extensions:Extensions.Icon="/Icons/upload.png"/>
+                <RadioButton Content=" Hosta Aktar" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding UploadViewCommand}" extensions:Extensions.Icon="/Icons/download.png"/>
+                <RadioButton Content=" Ayarlar" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding UploadViewCommand}" extensions:Extensions.Icon="/Icons/settings.png"/>
+            </StackPanel>
+        </Border>
+        <ContentPresenter Content="{Binding CurrentView, Mode=TwoWay}"/>
+    </DockPanel>
+    <!--<Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0">
+            <RadioButton Content="Hosta Aktar" Foreground="White" FontSize="14" Height="30" Style="{StaticResource Nav}" Command="{Binding UploadViewCommand}" IsChecked="True"/>
+            <RadioButton Content="Hosttan Al" Foreground="White" FontSize="14" Height="30" Style="{StaticResource Nav}" Command="{Binding DownloadViewCommand}"/>
+        </StackPanel>
+        <ContentControl Margin="10 0 10 0" Grid.Row="1" Grid.Column="1" Content="{Binding CurrentView}"/>
+    </Grid>-->
+</Window>
