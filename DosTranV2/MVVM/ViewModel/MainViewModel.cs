@@ -1,81 +1,76 @@
 ﻿using DosTranV2.Core;
 using DosTranV2.Data;
-using DosTranV2.MVVM.Model;
 using System;
+using System.Data.Entity;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace DosTranV2.MVVM.ViewModel
 {
     internal class MainViewModel : BaseViewModel
     {
-        private string _title;
-        private BaseViewModel _currentView;
         private ApplicationDbContext dbContext;
+        private string _uiMessage;
+        private Brush _borderColor;
 
-        public string Title
+        public string UIMessage
         {
-            get { return _title; }
+            get { return _uiMessage; }
             set
             {
-                _title = value;
-                OnPropertyChanged("Title");
+                _uiMessage = value;
+                OnPropertyChanged(nameof(UIMessage));
             }
         }
-        public Command UploadViewCommand { get; set; }
-        public Command DownloadViewCommand { get; set; }
-        public Command MoveWindowCommand { get; set; }
-        public Command ShutdownWindowCommand { get; set; }
-        public Command MinimizeWindowCommand { get; set; }
+        public Brush BorderColor
+        {
+            get { return _borderColor; }
+            set
+            {
+                _borderColor = value;
+                OnPropertyChanged(nameof(BorderColor));
+            }
+        }
+
+        #region ViewModels
+        private BaseViewModel _currentView;
         UploadViewModel UploadVM { get; set; }
         DownloadViewModel DownloadVM { get; set; }
-        UserModel UserModel { get; set; }
+        public UserViewModel UserVM { get; set; }
         public BaseViewModel CurrentView
         {
             get { return _currentView; }
             set
             {
                 _currentView = value;
-                OnPropertyChanged("CurrentView");
+                OnPropertyChanged(nameof(CurrentView));
             }
         }
+        #endregion
+
         public MainViewModel()
         {
-            Title = "DosTran Ver." + Properties.Settings.Default.Version;
-            UserModel = new UserModel();
-            UploadVM = new UploadViewModel(dbContext) { UserModel = UserModel };
-            DownloadVM = new DownloadViewModel(dbContext) { UserModel = UserModel };
+            dbContext = new ApplicationDbContext(ApplicationConstant.CONN_STRING);
+            UserVM = new UserViewModel();
+            UploadVM = new UploadViewModel(this);
+            DownloadVM = new DownloadViewModel(this);
 
             CurrentView = DownloadVM;
 
             SetCommands();
-            //LoadModel();
-
         }
 
-        private void LoadModel()
-        {
-            dbContext = new ApplicationDbContext();
-            if (!dbContext.Database.Exists())
-            {
-                var result = MessageBox.Show("Database bağlantısı kurulamadı uygulama kapatılacak.");
-                if (result == MessageBoxResult.OK)
-                {
-                    Environment.Exit(0);
-                }
-            }
-            var latestVersion = dbContext.DOSTRAN_VERSION.OrderByDescending(x => x.Id).FirstOrDefault();
-            if (Properties.Settings.Default.Version != latestVersion.Version)
-            {
-                var result = MessageBox.Show("Lütfen uygulamanın son versiyonunu indiriniz." + latestVersion.Link);
-                if (result == MessageBoxResult.OK)
-                {
-                    System.Diagnostics.Process.Start("http://" + latestVersion.Link);
-                    Application.Current.Shutdown();
-                }
-            }
-            Title = "DosTran Ver." + Properties.Settings.Default.Version;
-        }
+        #region Commands
+        public Command UploadViewCommand { get; set; }
+        public Command DownloadViewCommand { get; set; }
+        public Command MoveWindowCommand { get; set; }
+        public Command ShutdownWindowCommand { get; set; }
+        public Command MinimizeWindowCommand { get; set; }
+        public Command ContentRenderedCommand { get; set; }
 
         private void SetCommands()
         {
@@ -84,6 +79,53 @@ namespace DosTranV2.MVVM.ViewModel
             MinimizeWindowCommand = new Command(o => { Application.Current.MainWindow.WindowState = WindowState.Minimized; });
             UploadViewCommand = new Command(o => { CurrentView = UploadVM; });
             DownloadViewCommand = new Command(o => { CurrentView = DownloadVM; });
+            ContentRenderedCommand = new Command(ContentRendered);
+        }
+        #endregion
+
+        private void ContentRendered(object obj)
+        {
+            //BorderColor = (Brush)Application.Current.FindResource("NormalBorderBrush");
+            //UIMessage = "Database Bağlantısı kuruluyor. Lütfen Bekleyin.";
+            //Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background,
+            //      new Action(() =>
+            //      {
+            //          if (!dbContext.Database.Exists())
+            //          {
+            //              MessageBox.Show("Database bağlantısı kurulamadı. Uygulama kapatılacak!");
+            //              Environment.Exit(0);
+            //          }
+            //      }));
+            
+            //CheckVersion();
+        }
+
+        private void CheckVersion()
+        {
+            UIMessage = "Versiyon kontrolü yapılıyor";
+
+            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background,
+                  new Action(() =>
+                  {
+                      try
+                      {
+                          var latestVersion = dbContext.DOSTRAN_VERSION.OrderByDescending(x => x.Id).FirstOrDefault();
+                          if (ApplicationConstant.VER != latestVersion.Version)
+                          {
+                              var result = MessageBox.Show("Lütfen uygulamanın son versiyonunu indiriniz." + latestVersion.Link);
+                              if (result == MessageBoxResult.OK)
+                              {
+                                  System.Diagnostics.Process.Start("http://" + latestVersion.Link);
+                                  Application.Current.Shutdown();
+                              }
+                          }
+                      }
+                      catch (Exception)
+                      {
+                          MessageBox.Show("Versiyon bilgisi alınamadı. Uygulama kapatılacak!'");
+                          Environment.Exit(0);
+                      }
+                  }));
         }
     }
 }

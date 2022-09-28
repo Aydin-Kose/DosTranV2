@@ -4,40 +4,28 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DosTranV2.MVVM.View"
-             xmlns:model="clr-namespace:DosTranV2.MVVM.Model"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <!--<UserControl.DataContext>
-        <model:UserModel/>
-    </UserControl.DataContext>-->
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Border BorderThickness="1" BorderBrush="LightGray" Margin="10 10 10 -1" Padding="0 2 5 2">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Label Content="Op ID   : " Foreground="White"/>
-                <TextBox x:Name="opIdBox" Grid.Column="1" Text="{Binding OpID}" VerticalAlignment="Center" />
-                <Label Grid.Column="2" Content="Şifre     : " Foreground="White"/>
-                <PasswordBox x:Name="passwordBox"  Grid.Column="3" VerticalAlignment="Center" />
-            </Grid>
-        </Border>
-        <Border BorderThickness="1" BorderBrush="LightGray" Grid.Row="1" Margin="10 0 10 0" Padding="0 2 5 2">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Label Content="Ortam  : " HorizontalAlignment="Left" Foreground="White"/>
-                <ComboBox Grid.Column="1" ItemsSource="{Binding Path=EnvironmentList}" DisplayMemberPath="Name" SelectedValue="{Binding SelectedEnvironment}" VerticalAlignment="Center" />
-            </Grid>
-        </Border>
-    </Grid>
+             d:DesignWidth="400" d:Background="{StaticResource LightBackgroundBrush}">
+    <Border CornerRadius="5" BorderThickness="2" BorderBrush="{StaticResource PrimaryDarkBrush}" Padding="0 2 5 2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Op ID   : " Foreground="{StaticResource DarkHalkBrush}"/>
+            <TextBox x:Name="opIdBox" Grid.Column="1" Text="{Binding OpID}" VerticalAlignment="Center" />
+            <Label Grid.Column="2" Content="Şifre     : " Foreground="{StaticResource DarkHalkBrush}"/>
+            <PasswordBox x:Name="passwordBox"  Grid.Column="3" VerticalAlignment="Center" />
+            <Border Grid.ColumnSpan="4" VerticalAlignment="Center" Margin="0,0,-5,2" BorderThickness="1" BorderBrush="{StaticResource PrimaryDarkBrush}" Grid.Row="1" />
+            <Label Grid.Row="2" Content="Ortam  : " HorizontalAlignment="Left" Foreground="{StaticResource DarkHalkBrush}"/>
+            <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Margin="0 2 0 2" ItemsSource="{Binding Path=EnvironmentList}" DisplayMemberPath="Name" SelectedValue="{Binding SelectedEnvironment}" VerticalAlignment="Center" />
+        </Grid>
+    </Border>
 </UserControl>

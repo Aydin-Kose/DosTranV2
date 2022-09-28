@@ -4,76 +4,48 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DosTranV2"
-        xmlns:extensions="clr-namespace:DosTranV2.Core"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:view="clr-namespace:DosTranV2.MVVM.View"
         xmlns:viewModel="clr-namespace:DosTranV2.MVVM.ViewModel"
         mc:Ignorable="d"
-        Title="DosTran" Height="400" Width="400"
+        Title="DosTran"
+        x:Name="MainWiew"
         WindowStyle="None"
-        Background="Transparent"
-        AllowsTransparency="True"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Height="450" Width="400">
     <Window.DataContext>
         <viewModel:MainViewModel/>
     </Window.DataContext>
-    <DockPanel Background="#1E1E1E" Margin="7">
-        <Border Height="28" Background="#252525" DockPanel.Dock="Top">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="ContentRendered">
+            <i:InvokeCommandAction Command="{Binding ContentRenderedCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <DockPanel Background="{StaticResource LightBackgroundBrush}">
+        <Border x:Name="Caption" Height="28" Background="{StaticResource PrimaryDarkBrush}" DockPanel.Dock="Top">
             <Border.InputBindings>
                 <MouseBinding MouseAction="LeftClick" Command="{Binding MoveWindowCommand}"/>
             </Border.InputBindings>
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="100"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Title}" Foreground="LightGray" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="100 0 0 0"/>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 4 0">
-                    <Button Content="−" Command="{Binding MinimizeWindowCommand}"/>
-                    <Button Content="🗙" Command="{Binding ShutdownWindowCommand}"/>
+                <TextBlock Text="{Binding Title, FallbackValue=DosTran}" Foreground="{StaticResource TextBrush}" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 5 0">
+                    <Button Style="{StaticResource CaptionBtn}" Content="−" FontWeight="Bold" Command="{Binding MinimizeWindowCommand}"/>
+                    <Button Style="{StaticResource CaptionBtn}" Content="🗙" FontWeight="Bold" Command="{Binding ShutdownWindowCommand}"/>
                 </StackPanel>
             </Grid>
         </Border>
-        <Border Width="43" HorizontalAlignment="Left" Background="#252525">
-            <Border.Style>
-                <Style>
-                    <Style.Triggers>
-                        <EventTrigger RoutedEvent="Border.MouseEnter">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="(Border.Width)"  To="140" Duration="0:0:.1"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="Border.MouseLeave">
-                            <EventTrigger.Actions>
-                                <BeginStoryboard>
-                                    <Storyboard>
-                                        <DoubleAnimation Storyboard.TargetProperty="(Border.Width)"  To="43" Duration="0:0:.1"/>
-                                    </Storyboard>
-                                </BeginStoryboard>
-                            </EventTrigger.Actions>
-                        </EventTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Border.Style>
-            <StackPanel>
-                <RadioButton Content=" Hosttan Al" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding DownloadViewCommand}" IsChecked="True" extensions:Extensions.Icon="/Icons/upload.png"/>
-                <RadioButton Content=" Hosta Aktar" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding UploadViewCommand}" extensions:Extensions.Icon="/Icons/download.png"/>
-                <!--<RadioButton Content=" Ayarlar" FontSize="16" FontWeight="Normal" Foreground="LightGray" Command="{Binding UploadViewCommand}" extensions:Extensions.Icon="/Icons/settings.png"/>-->
-            </StackPanel>
-        </Border>
-        <ContentPresenter Content="{Binding CurrentView, Mode=TwoWay}"/>
-    </DockPanel>
-    <!--<Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0">
-            <RadioButton Content="Hosta Aktar" Foreground="White" FontSize="14" Height="30" Style="{StaticResource Nav}" Command="{Binding UploadViewCommand}" IsChecked="True"/>
-            <RadioButton Content="Hosttan Al" Foreground="White" FontSize="14" Height="30" Style="{StaticResource Nav}" Command="{Binding DownloadViewCommand}"/>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Background="{StaticResource DarkHalkBrush}">
+            <RadioButton Content="Hosttan Al" Style="{StaticResource NavButton}" Command="{Binding DownloadViewCommand}" IsChecked="True" />
+            <RadioButton Content="Hosta Aktar" Style="{StaticResource NavButton}" Command="{Binding UploadViewCommand}" />
         </StackPanel>
-        <ContentControl Margin="10 0 10 0" Grid.Row="1" Grid.Column="1" Content="{Binding CurrentView}"/>
-    </Grid>-->
+        <view:UserView DockPanel.Dock="Top" x:Name="UserComponent" DataContext="{Binding UserVM}" Margin="10 8 10 0"/>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <ContentPresenter x:Name="content" Content="{Binding CurrentView, Mode=TwoWay}"  Margin="0 -2 0 0"/>
+            <TextBox Grid.Row="1" IsReadOnly="True" x:Name="messageBox" Background="{StaticResource LightBackgroundBrush}" Text="{Binding UIMessage, FallbackValue=AlanlarıDoldur}" Foreground="{StaticResource NormalBorderBrush}" Margin="0 10 0 0" TextAlignment="Center" Padding="0 2 0 2" BorderBrush="{Binding BorderColor}" BorderThickness="2"/>
+        </Grid>
+    </DockPanel>
 </Window>

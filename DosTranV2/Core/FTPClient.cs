@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
 
 namespace DosTranV2.Core
 {
@@ -28,12 +25,12 @@ namespace DosTranV2.Core
         {
             _ftpRequest = (FtpWebRequest)FtpWebRequest.Create($"{_host}/'{remoteFile}'");
             _ftpRequest.Credentials = new NetworkCredential(_user, _pass);
-            _ftpRequest.UseBinary = true;//false
+            _ftpRequest.UseBinary = false;//false
             _ftpRequest.UsePassive = true;
             _ftpRequest.KeepAlive = true;
         }
 
-        public string Download(string remoteFile, string localFile)
+        public string Download(string remoteFile, string localFile, string fileType)
         {
             try
             {
@@ -42,23 +39,44 @@ namespace DosTranV2.Core
                 _ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
                 _ftpResponse = (FtpWebResponse)_ftpRequest.GetResponse();
                 _ftpStream = _ftpResponse.GetResponseStream();
-                FileStream localFileStream = new FileStream(localFile, FileMode.Create);
-                byte[] byteBuffer = new byte[_bufferSize];
-                int bytesRead = _ftpStream.Read(byteBuffer, 0, _bufferSize);
                 try
                 {
-                    while (bytesRead > 0)
+                    if (fileType == "Text")
                     {
-                        localFileStream.Write(byteBuffer, 0, bytesRead);
-                        bytesRead = _ftpStream.Read(byteBuffer, 0, _bufferSize);
+                        FileStream localFileStream = new FileStream(localFile, FileMode.Create);
+
+                        byte[] byteBuffer = new byte[_bufferSize];
+                        int bytesRead = _ftpStream.Read(byteBuffer, 0, _bufferSize);
+
+                        while (bytesRead > 0)
+                        {
+                            localFileStream.Write(byteBuffer, 0, bytesRead);
+                            bytesRead = _ftpStream.Read(byteBuffer, 0, _bufferSize);
+                        }
+                        localFileStream.Close();
+                    }
+                    else
+                    {
+                        //StreamReader reader = new StreamReader(_ftpStream, System.Text.Encoding.UTF8);
+                        //string line;
+                        //while (reader.Peek() > -1)
+                        //{
+                        //    line = reader.ReadLine();
+                        //}
+                        //Excel.Application excel = new Excel.Application();
+                        //Excel.Workbook workBook = excel.Workbooks.Add();
+                        //Excel.Worksheet sheet = (Excel.Worksheet)workBook.ActiveSheet;
+
+                        //workBook.SaveAs(localFile);
+                        //workBook.Close();
                     }
                 }
+
                 catch (Exception ex)
                 {
                     return "FTP indirme hatası: " + ex.Message;
                 }
                 //Resource Cleanup
-                localFileStream.Close();
                 _ftpStream.Close();
                 _ftpResponse.Close();
                 _ftpRequest = null;
@@ -69,7 +87,7 @@ namespace DosTranV2.Core
             }
             catch (Exception ex)
             {
-                return "Genel Hata: " + ex.Message;
+                return "FTP Hata: " + ex.Message;
             }
             return "İşlem Başarılı";
         }
@@ -85,17 +103,12 @@ namespace DosTranV2.Core
                 _ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
                 _ftpStream = _ftpRequest.GetRequestStream();
                 FileStream localFileStream = new FileStream(localFile, FileMode.Open);
-                byte[] byteBuffer = new byte[_bufferSize];
-                int bytesSent = localFileStream.Read(byteBuffer, 0, _bufferSize);
-                int i = 1;
+                var buffLenght = Convert.ToInt32(localFileStream.Length);
+                byte[] byteBuffer = new byte[buffLenght];
+                int bytesSent = localFileStream.Read(byteBuffer, 0, buffLenght);
                 try
                 {
-                    while (bytesSent != 0)
-                    {
-                        _ftpStream.Write(byteBuffer, 0, bytesSent);
-                        bytesSent = localFileStream.Read(byteBuffer, 0, _bufferSize);
-                        i++;
-                    }
+                    _ftpStream.Write(byteBuffer, 0, bytesSent);
                 }
                 catch (Exception ex)
                 {
@@ -111,7 +124,7 @@ namespace DosTranV2.Core
             }
             catch (Exception ex)
             {
-                return "Genel Hata: " + ex.Message;
+                return "FTP Hata: " + ex.Message;
             }
             return "İşlem Başarılı";
         }

@@ -1,8 +1,4 @@
-﻿using DosTranV2.Data;
-using System.Data.Entity;
-using System;
-using System.Windows;
-using System.Linq;
+﻿using System.Windows;
 
 namespace DosTranV2
 {

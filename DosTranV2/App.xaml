@@ -8,15 +8,17 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style/Colors.xaml"/>
                 <ResourceDictionary Source="Style/NavButton.xaml"/>
                 <ResourceDictionary Source="Style/CaptionButton.xaml"/>
-                <ResourceDictionary Source="Style/PrimaryButton.xaml"/>
+                <ResourceDictionary Source="Style/PrimaryButtonStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
             <DataTemplate DataType="{x:Type viewModel:UploadViewModel}">
-                <view:UploadView/>
+                <view:UploadView x:Name="UploadView"/>
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewModel:DownloadViewModel}">
-                <view:DownloadView/>
+                <view:DownloadView x:Name="DownloadView"/>
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>

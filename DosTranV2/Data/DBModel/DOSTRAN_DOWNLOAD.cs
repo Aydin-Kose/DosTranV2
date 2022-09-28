@@ -5,15 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 
-namespace DosTranV2.Data.Model
+namespace DosTranV2.DBModel.Model
 {
-    public class DOSTRAN_VERSION
+    public class DOSTRAN_DOWNLOAD
     {
         [Key]
         public int Id { get; set; }
         [Column(TypeName = "NVARCHAR")]
         [StringLength(10)]
-        public string Version { get; set; }
-        public string Link { get; set; }
+        public string OpID { get; set; }
+        public string DataSet { get; set; }
     }
 }
