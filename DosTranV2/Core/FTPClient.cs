@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace DosTranV2.Core
 {
@@ -30,7 +31,7 @@ namespace DosTranV2.Core
             _ftpRequest.KeepAlive = true;
         }
 
-        public string Download(string remoteFile, string localFile, string fileType)
+        public string Download(string remoteFile, string localFile, string fileType, char? seperator)
         {
             try
             {
@@ -57,18 +58,26 @@ namespace DosTranV2.Core
                     }
                     else
                     {
-                        //StreamReader reader = new StreamReader(_ftpStream, System.Text.Encoding.UTF8);
-                        //string line;
-                        //while (reader.Peek() > -1)
-                        //{
-                        //    line = reader.ReadLine();
-                        //}
-                        //Excel.Application excel = new Excel.Application();
-                        //Excel.Workbook workBook = excel.Workbooks.Add();
-                        //Excel.Worksheet sheet = (Excel.Worksheet)workBook.ActiveSheet;
 
-                        //workBook.SaveAs(localFile);
-                        //workBook.Close();
+                        Excel.Application excel = new Excel.Application();
+                        Excel.Workbook workBook = excel.Workbooks.Add();
+                        Excel.Worksheet sheet = (Excel.Worksheet)workBook.ActiveSheet;
+                        StreamReader reader = new StreamReader(_ftpStream, System.Text.Encoding.UTF8);
+                        string line;
+                        int lineNumber = 1;
+                        while (reader.Peek() > -1)
+                        {
+                            line = reader.ReadLine();
+                            string[] cells = line.Split((char)seperator);
+                            for (int i = 0; i < cells.Length; i++)
+                            {
+                                sheet.Cells[lineNumber,i+1] = cells[i];
+                            }
+                            lineNumber++;
+                        }
+
+                        workBook.SaveAs(localFile);
+                        workBook.Close();
                     }
                 }
 
