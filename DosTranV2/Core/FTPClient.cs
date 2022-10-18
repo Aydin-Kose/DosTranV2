@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace DosTranV2.Core
@@ -31,7 +32,7 @@ namespace DosTranV2.Core
             _ftpRequest.KeepAlive = true;
         }
 
-        public string Download(string remoteFile, string localFile, string fileType, char? seperator)
+        public string Download(string remoteFile, string localFile, string fileType, string seperator)
         {
             try
             {
@@ -42,43 +43,49 @@ namespace DosTranV2.Core
                 _ftpStream = _ftpResponse.GetResponseStream();
                 try
                 {
-                    if (fileType == "Text")
+                    //if (fileType == "Text")
+                    //{
+                    FileStream localFileStream = new FileStream(localFile, FileMode.Create);
+                    if (fileType == "Excel")
                     {
-                        FileStream localFileStream = new FileStream(localFile, FileMode.Create);
-
-                        byte[] byteBuffer = new byte[_bufferSize];
-                        int bytesRead = _ftpStream.Read(byteBuffer, 0, _bufferSize);
-
-                        while (bytesRead > 0)
-                        {
-                            localFileStream.Write(byteBuffer, 0, bytesRead);
-                            bytesRead = _ftpStream.Read(byteBuffer, 0, _bufferSize);
-                        }
-                        localFileStream.Close();
+                        var sep = $"\"sep={seperator}\"\n";
+                        var sepByteArray = Encoding.ASCII.GetBytes(sep);
+                        localFileStream.Write(sepByteArray, 0, sepByteArray.Length);
                     }
-                    else
+
+                    byte[] byteBuffer = new byte[_bufferSize];
+                    int bytesRead = _ftpStream.Read(byteBuffer, 0, _bufferSize);
+                    while (bytesRead > 0)
                     {
-
-                        Excel.Application excel = new Excel.Application();
-                        Excel.Workbook workBook = excel.Workbooks.Add();
-                        Excel.Worksheet sheet = (Excel.Worksheet)workBook.ActiveSheet;
-                        StreamReader reader = new StreamReader(_ftpStream, System.Text.Encoding.UTF8);
-                        string line;
-                        int lineNumber = 1;
-                        while (reader.Peek() > -1)
-                        {
-                            line = reader.ReadLine();
-                            string[] cells = line.Split((char)seperator);
-                            for (int i = 0; i < cells.Length; i++)
-                            {
-                                sheet.Cells[lineNumber,i+1] = cells[i];
-                            }
-                            lineNumber++;
-                        }
-
-                        workBook.SaveAs(localFile);
-                        workBook.Close();
+                        localFileStream.Write(byteBuffer, 0, bytesRead);
+                        bytesRead = _ftpStream.Read(byteBuffer, 0, _bufferSize);
                     }
+                    localFileStream.Close();
+                    //}
+                    //else
+                    //{
+
+                    //    Excel.Application excel = new Excel.Application();
+                    //    Excel.Workbook workBook = excel.Workbooks.Add();
+                    //    Excel.Worksheet sheet = (Excel.Worksheet)workBook.ActiveSheet;
+                    //    StreamReader reader = new StreamReader(_ftpStream, System.Text.Encoding.UTF8);
+                    //    string line;
+                    //    int lineNumber = 1;
+                    //    while (reader.Peek() > -1)
+                    //    {
+                    //        line = reader.ReadLine();
+                    //        string[] cells = line.Split(seperator[0]);
+                    //        var range = sheet.Range(sheet.Cells[lineNumber, 0], sheet.Cells[lineNumber, cells.Length + 1]);
+                    //        for (int i = 0; i < cells.Length; i++)
+                    //        {
+                    //            sheet.Cells[lineNumber, i + 1] = cells[i];
+                    //        }
+                    //        lineNumber++;
+                    //    }
+
+                    //    workBook.SaveAs(localFile);
+                    //    workBook.Close();
+                    //}
                 }
 
                 catch (Exception ex)

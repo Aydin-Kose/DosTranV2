@@ -14,6 +14,8 @@ using System.IO;
 using System.Net;
 using System.Windows.Forms;
 using MessageBox = System.Windows.MessageBox;
+using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace DosTranV2.MVVM.ViewModel
 {
@@ -22,7 +24,7 @@ namespace DosTranV2.MVVM.ViewModel
         private ApplicationDbContext dbContext;
         private List<string> _dataSetList;
         private string _dataSet;
-        private char? _seperator;
+        private string _seperator;
         private string _fileLocation;
         private MainViewModel mainViewModel;
 
@@ -45,7 +47,7 @@ namespace DosTranV2.MVVM.ViewModel
             }
         }
         public string FileType { get; set; }
-        public char? Seperator
+        public string Seperator
         {
             get { return _seperator; }
             set
@@ -83,7 +85,7 @@ namespace DosTranV2.MVVM.ViewModel
             FTPDownload = new Command(DownloadAction);
             dbContext = new ApplicationDbContext(ApplicationConstant.CONN_STRING);
             FileType = "Text";
-            Seperator = ';';
+            Seperator = ";";
             FileLocation = Path.GetTempPath();
         }
 
@@ -105,18 +107,21 @@ namespace DosTranV2.MVVM.ViewModel
             {
                 mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("NormalBorderBrush");
                 mainViewModel.UIMessage = "İşlem başladı.";
-                var FTPClient = new FTPClient(mainViewModel.UserVM.SelectedEnvironment.IP, mainViewModel.UserVM.OpID, mainWindow.UserComponent.passwordBox.Password);
-                var result = FTPClient.Download(DataSet, $"{FileLocation}\\{DataSet}.{(FileType == "Text" ? "txt" : "xls")}", FileType, Seperator);
-                mainViewModel.UIMessage = result;
-                if (result == "İşlem Başarılı")
+                Task.Factory.StartNew(() =>
                 {
-                    mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("SuccessBorderBrush");
-                    LogDownload();
-                }
-                else
-                {
-                    mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("AlertBorderBrush");
-                }
+                    var FTPClient = new FTPClient(mainViewModel.UserVM.SelectedEnvironment.IP, mainViewModel.UserVM.OpID, mainWindow.UserComponent.passwordBox.Password);
+                    var result = FTPClient.Download(DataSet, $"{FileLocation}\\{DataSet}.{(FileType == "Text" ? "txt" : "csv")}", FileType, Seperator);
+                    mainViewModel.UIMessage = result;
+                    if (result == "İşlem Başarılı")
+                    {
+                        mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("SuccessBorderBrush");
+                        LogDownload();
+                    }
+                    else
+                    {
+                        mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("AlertBorderBrush");
+                    }
+                });
             }
             else
             {
@@ -189,11 +194,22 @@ namespace DosTranV2.MVVM.ViewModel
                 downloadview.datasetBox.Focus();
                 return false;
             }
-            else if (FileType == "Excel" && Seperator!=null)
+            else if (FileType == "Excel")
             {
-                mainViewModel.UIMessage = "Dosya tipi Excel ise seperatör alanı boş olamaz";
-                downloadview.seperatorBox.Focus();
-                return false;
+                if (Seperator.Length > 1)
+                {
+                    mainViewModel.UIMessage = "Seperator 1 karakterden fazla olamaz";
+
+                    downloadview.seperatorBox.Focus();
+                    return false;
+                }
+                else if (string.IsNullOrWhiteSpace(Seperator))
+                {
+                    mainViewModel.UIMessage = "Dosya tipi Excel ise seperatör alanı boş olamaz";
+
+                    downloadview.seperatorBox.Focus();
+                    return false;
+                }
             }
             return true;
         }

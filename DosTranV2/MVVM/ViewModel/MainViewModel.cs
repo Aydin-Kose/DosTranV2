@@ -77,27 +77,31 @@ namespace DosTranV2.MVVM.ViewModel
             MoveWindowCommand = new Command(o => { Application.Current.MainWindow.DragMove(); });
             ShutdownWindowCommand = new Command(o => { Application.Current.Shutdown(); });
             MinimizeWindowCommand = new Command(o => { Application.Current.MainWindow.WindowState = WindowState.Minimized; });
-            UploadViewCommand = new Command(o => { CurrentView = UploadVM; });
-            DownloadViewCommand = new Command(o => { CurrentView = DownloadVM; });
+            UploadViewCommand = new Command(o => { CurrentView = UploadVM; ClearUIMessage(); });
+            DownloadViewCommand = new Command(o => { CurrentView = DownloadVM; ClearUIMessage(); });
             ContentRenderedCommand = new Command(ContentRendered);
         }
         #endregion
-
+        public void ClearUIMessage()
+        {
+            BorderColor = (Brush)Application.Current.FindResource("NormalBorderBrush");
+            UIMessage = "";
+        }
         private void ContentRendered(object obj)
         {
-            //BorderColor = (Brush)Application.Current.FindResource("NormalBorderBrush");
-            //UIMessage = "Database Bağlantısı kuruluyor. Lütfen Bekleyin.";
-            //Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background,
-            //      new Action(() =>
-            //      {
-            //          if (!dbContext.Database.Exists())
-            //          {
-            //              MessageBox.Show("Database bağlantısı kurulamadı. Uygulama kapatılacak!");
-            //              Environment.Exit(0);
-            //          }
-            //      }));
-            
-            //CheckVersion();
+            BorderColor = (Brush)Application.Current.FindResource("NormalBorderBrush");
+            UIMessage = "Database Bağlantısı kuruluyor. Lütfen Bekleyin.";
+            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background,
+                  new Action(() =>
+                  {
+                      if (!dbContext.Database.Exists())
+                      {
+                          MessageBox.Show("Database bağlantısı kurulamadı. Uygulama kapatılacak!");
+                          Environment.Exit(0);
+                      }
+                  }));
+
+            CheckVersion();
         }
 
         private void CheckVersion()
@@ -118,6 +122,10 @@ namespace DosTranV2.MVVM.ViewModel
                                   System.Diagnostics.Process.Start("http://" + latestVersion.Link);
                                   Application.Current.Shutdown();
                               }
+                          }
+                          else
+                          {
+                              UIMessage = "Versiyon kontrolü başarılı";
                           }
                       }
                       catch (Exception)
