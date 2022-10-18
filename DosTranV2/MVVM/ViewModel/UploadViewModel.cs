@@ -9,8 +9,10 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace DosTranV2.MVVM.ViewModel
 {
@@ -59,18 +61,21 @@ namespace DosTranV2.MVVM.ViewModel
             {
                 mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("NormalBorderBrush");
                 mainViewModel.UIMessage = "İşlem başladı.";
-                var FTPClient = new FTPClient(mainViewModel.UserVM.SelectedEnvironment.IP, mainViewModel.UserVM.OpID, mainWindow.UserComponent.passwordBox.Password);
-                var result = FTPClient.Upload(DataSet, FileLocation);
-                mainViewModel.UIMessage = result;
-                if (result == "İşlem Başarılı")
+                Task.Factory.StartNew(() =>
                 {
-                    mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("SuccessBorderBrush");
-                    LogUpload();
-                }
-                else
-                {
-                    mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("AlertBorderBrush");
-                }
+                      var FTPClient = new FTPClient(mainViewModel.UserVM.SelectedEnvironment.IP, mainViewModel.UserVM.OpID, mainWindow.UserComponent.passwordBox.Password);
+                      var result = FTPClient.Upload(DataSet, FileLocation);
+                      mainViewModel.UIMessage = result;
+                      if (result == "İşlem Başarılı")
+                      {
+                          mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("SuccessBorderBrush");
+                          LogUpload();
+                      }
+                      else
+                      {
+                          mainViewModel.BorderColor = (Brush)System.Windows.Application.Current.FindResource("AlertBorderBrush");
+                      }
+                  });
             }
             else
             {

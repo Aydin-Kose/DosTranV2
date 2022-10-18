@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DosTranV2.MVVM.View"
              mc:Ignorable="d" 
-             d:DesignHeight="290" d:DesignWidth="400" d:Background="{StaticResource LightBackgroundBrush}">
+             d:DesignHeight="290" d:DesignWidth="400" >
     <Grid Margin="10 0 10 0">
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -33,6 +33,6 @@
                 <ComboBox x:Name="datasetBox" Text="{Binding DataSet}" ItemsSource="{Binding Path=DataSetList}" Margin="5 0 0 0" VerticalAlignment="Center" IsTextSearchEnabled="True" IsEditable="True" GotFocus="datasetBox_GotFocus" KeyUp="datasetBox_KeyUp"/>
             </StackPanel>
         </Border>
-        <Button Grid.Row="2" Width="120" Height="30" Content="İndir" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding FTPUpload}" CommandParameter="{Binding ElementName=MainWiew}"/>
+        <Button Grid.Row="2" Width="120" Height="30" Content="Yükle" Style="{StaticResource PrimaryButtonStyle}" Command="{Binding FTPUpload}" CommandParameter="{Binding ElementName=MainWiew}"/>
     </Grid>
 </UserControl>

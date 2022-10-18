@@ -3,10 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Threading;
 using UserControl = System.Windows.Controls.UserControl;
 
 namespace DosTranV2.MVVM.View
@@ -41,8 +43,12 @@ namespace DosTranV2.MVVM.View
         private void datasetBox_GotFocus(object sender, RoutedEventArgs e)
         {
             var cbox = sender as System.Windows.Controls.ComboBox;
-            lastGeneratedDatasetList = model.FillDataset();
-            cbox.ItemsSource = lastGeneratedDatasetList;
+            Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.Background,
+                  new Action(() =>
+                  {
+                lastGeneratedDatasetList = model.FillDataset();
+                cbox.ItemsSource = lastGeneratedDatasetList;
+            }));
         }
 
         private void datasetBox_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
@@ -55,7 +61,7 @@ namespace DosTranV2.MVVM.View
             else
             {
                 cbox.ItemsSource = lastGeneratedDatasetList?.FindAll(x => x.Contains(cbox.Text.ToUpper()));
-                if (((List<string>)cbox.ItemsSource).Count > 0)
+                if (((List<string>)cbox.ItemsSource).Count > 0 && e.Key != Key.Enter)
                 {
                     cbox.IsDropDownOpen = true;
                 }

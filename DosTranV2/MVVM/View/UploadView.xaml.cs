@@ -50,7 +50,7 @@ namespace DosTranV2.MVVM.View
             else
             {
                 cbox.ItemsSource = lastGeneratedDatasetList?.FindAll(x => x.Contains(cbox.Text.ToUpper()));
-                if (((List<string>)cbox.ItemsSource).Count > 0)
+                if (((List<string>)cbox.ItemsSource).Count > 0 && e.Key != Key.Enter)
                 {
                     cbox.IsDropDownOpen = true;
                 }
@@ -102,5 +102,6 @@ namespace DosTranV2.MVVM.View
             model.FileName = Path.GetFileName(fileLocation);
             model.FileLocation = fileLocation;
         }
+
     }
 }
