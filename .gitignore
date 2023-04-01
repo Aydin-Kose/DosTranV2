@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 #My Ignores
+DosTranV2/Core/ApplicationConstant.cs
